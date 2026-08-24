@@ -1,0 +1,17 @@
+; /etc/supervisor/conf.d/kaxon-mailer-worker.conf
+; Keeps `php artisan queue:work` running permanently and restarts it if it
+; crashes. After adding/editing this file: supervisorctl reread && supervisorctl update
+
+[program:kaxon-mailer-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /var/www/kaxon-mailer/artisan queue:work --sleep=3 --tries=3 --max-time=3600
+directory=/var/www/kaxon-mailer
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+user=www-data
+numprocs=1
+redirect_stderr=true
+stdout_logfile=/var/www/kaxon-mailer/storage/logs/worker.log
+stopwaitsecs=3600

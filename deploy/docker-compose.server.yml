@@ -1,0 +1,40 @@
+# Sendpeak on the GCP server, alongside self-hosted Supabase.
+# - web    : admin UI (nginx + php-fpm) on host port 8080
+# - worker : queue consumers that actually send via SES (scale as needed)
+# - redis  : queue backend + shared cache (exact SES rate limiting)
+#
+# The web/worker containers join Supabase's docker network so they can reach
+# Postgres at host "db" (alias of the supabase-db container).
+
+services:
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    networks: [internal]
+
+  web:
+    image: sendpeak-app
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "8080:80"
+    networks: [supabase, internal]
+    depends_on: [redis]
+
+  worker:
+    image: sendpeak-app
+    restart: unless-stopped
+    env_file: .env
+    command: php artisan queue:work redis --queue=emails,default --sleep=1 --tries=25 --backoff=30 --max-time=3600
+    networks: [supabase, internal]
+    depends_on: [redis, web]
+
+networks:
+  supabase:
+    external: true
+    name: supabase_default
+  internal:
+    driver: bridge

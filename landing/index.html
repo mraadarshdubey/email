@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sendpeak — Email marketing insights, straight to your inbox</title>
+<meta name="description" content="Sendpeak is where our team shares what we learn about email deliverability and marketing. Subscribe to our monthly newsletter — practical insights, no noise.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238b5cf6'/%3E%3Cstop offset='1' stop-color='%232dd4bf'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M14 24l18 12 18-12' stroke='%23070710' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Crect x='14' y='18' width='36' height='28' rx='6' stroke='%23070710' stroke-width='4' fill='none'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07070c;
+  --bg-2:#0b0c14;
+  --surface:#10111c;
+  --surface-2:#151628;
+  --line:rgba(255,255,255,.08);
+  --line-2:rgba(255,255,255,.14);
+  --text:#e8e8f2;
+  --muted:#9a9ab0;
+  --subtle:#63637a;
+  --violet:#8b5cf6;
+  --violet-2:#a78bfa;
+  --teal:#2dd4bf;
+  --lime:#a3e635;
+  --amber:#fbbf24;
+  --grad:linear-gradient(92deg,var(--violet-2) 0%,var(--teal) 100%);
+  --radius:18px;
+  --font-display:"Bricolage Grotesque",sans-serif;
+  --font-body:"Instrument Sans",sans-serif;
+  --font-mono:"IBM Plex Mono",monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-body);
+  font-size:16px;
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:rgba(139,92,246,.45);color:#fff}
+
+/* ── atmosphere ── */
+.atmo{position:fixed;inset:0;z-index:-2;pointer-events:none}
+.atmo::before{
+  content:"";position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(ellipse 90% 60% at 50% 0%,#000 30%,transparent 75%);
+}
+.atmo::after{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(700px 420px at 18% -5%,rgba(139,92,246,.22),transparent 60%),
+    radial-gradient(650px 400px at 85% 5%,rgba(45,212,191,.12),transparent 60%),
+    radial-gradient(900px 600px at 50% 110%,rgba(139,92,246,.10),transparent 65%);
+}
+.grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .035 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+
+/* ── nav ── */
+.nav-shell{position:fixed;top:18px;left:0;right:0;z-index:50;display:flex;justify-content:center;padding:0 16px}
+nav{
+  width:100%;max-width:1180px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  background:rgba(13,14,22,.72);
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:10px 12px 10px 18px;
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  box-shadow:0 10px 40px rgba(0,0,0,.45);
+}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:700;font-size:19px;letter-spacing:-.02em}
+.brand .mark{width:34px;height:34px;border-radius:10px;background:var(--grad);display:grid;place-items:center;box-shadow:0 4px 18px rgba(139,92,246,.5)}
+.brand .mark svg{width:18px;height:18px}
+.nav-links{display:flex;gap:4px;list-style:none}
+.nav-links a{font-size:14px;font-weight:500;color:var(--muted);padding:8px 14px;border-radius:999px;transition:.2s}
+.nav-links a:hover{color:var(--text);background:rgba(255,255,255,.06)}
+.nav-cta{display:flex;align-items:center;gap:6px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:var(--font-body);font-weight:600;font-size:14.5px;
+  border-radius:999px;padding:11px 22px;cursor:pointer;border:0;transition:.22s;white-space:nowrap;
+}
+.btn-ghost{color:var(--muted);background:transparent}
+.btn-ghost:hover{color:var(--text)}
+.btn-primary{
+  color:#0b0714;background:linear-gradient(120deg,#a78bfa,#8b5cf6 55%,#7c3aed);
+  box-shadow:0 6px 24px rgba(139,92,246,.45),inset 0 1px 0 rgba(255,255,255,.35);
+  position:relative;overflow:hidden;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(139,92,246,.6),inset 0 1px 0 rgba(255,255,255,.35)}
+.btn-primary::after{content:"";position:absolute;top:0;left:-80%;width:60%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);animation:shine 4.5s ease-in-out infinite}
+@keyframes shine{0%,60%{left:-80%}80%,100%{left:130%}}
+.btn-outline{color:var(--text);background:rgba(255,255,255,.04);border:1px solid var(--line-2)}
+.btn-outline:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.25)}
+.btn-lg{padding:15px 30px;font-size:16px}
+
+/* ── hero ── */
+.hero{padding:170px 0 90px;position:relative}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.badge{
+  display:inline-flex;align-items:center;gap:9px;
+  font-family:var(--font-mono);font-size:11.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  color:#c9c9de;background:rgba(255,255,255,.05);border:1px solid var(--line);
+  padding:8px 16px;border-radius:999px;margin-bottom:26px;
+}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 0 rgba(163,230,53,.6);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(163,230,53,.55)}70%{box-shadow:0 0 0 9px rgba(163,230,53,0)}100%{box-shadow:0 0 0 0 rgba(163,230,53,0)}}
+h1{
+  font-family:var(--font-display);
+  font-size:clamp(44px,5.6vw,76px);
+  font-weight:800;line-height:1.02;letter-spacing:-.03em;
+  margin-bottom:26px;
+}
+.grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lede{font-size:18.5px;color:var(--muted);max-width:520px;margin-bottom:34px}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:38px}
+.trust{display:flex;align-items:center;gap:18px;flex-wrap:wrap;font-family:var(--font-mono);font-size:12px;color:var(--subtle);letter-spacing:.05em}
+.trust span{display:inline-flex;align-items:center;gap:7px}
+.trust svg{width:14px;height:14px;color:var(--teal)}
+
+/* hero mockup */
+.mock-wrap{position:relative;animation:float 7s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.mock{
+  background:linear-gradient(180deg,rgba(21,22,40,.92),rgba(13,14,24,.96));
+  border:1px solid var(--line-2);border-radius:22px;overflow:hidden;
+  box-shadow:0 40px 90px rgba(0,0,0,.6),0 0 0 1px rgba(139,92,246,.08),0 0 90px rgba(139,92,246,.14);
+}
+.mock-bar{display:flex;align-items:center;gap:8px;padding:13px 18px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}
+.mock-bar i{width:11px;height:11px;border-radius:50%;display:block}
+.mock-bar .r{background:#ff5f57}.mock-bar .y{background:#febc2e}.mock-bar .g{background:#28c840}
+.mock-bar .title{margin-left:8px;font-family:var(--font-mono);font-size:12px;color:var(--muted)}
+.live-chip{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;color:var(--lime);background:rgba(163,230,53,.08);border:1px solid rgba(163,230,53,.25);padding:4px 10px;border-radius:999px}
+.mock-body{padding:22px 22px 26px}
+.mock-sub{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--subtle);margin-bottom:6px}
+.mock-subject{font-family:var(--font-display);font-weight:600;font-size:19px;margin-bottom:18px}
+.meter{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+.meter-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.meter-top b{font-family:var(--font-mono);font-size:22px;font-weight:600;color:var(--text)}
+.meter-top small{font-family:var(--font-mono);font-size:11px;color:var(--subtle)}
+.bar{height:9px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden}
+.bar > i{display:block;height:100%;width:0;border-radius:99px;background:var(--grad);box-shadow:0 0 16px rgba(45,212,191,.5);animation:fill 3.4s cubic-bezier(.25,.8,.25,1) .6s forwards}
+@keyframes fill{to{width:68%}}
+.mock-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.ms{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:11px;padding:12px 8px;text-align:center}
+.ms b{display:block;font-family:var(--font-mono);font-size:16px;font-weight:600}
+.ms span{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--subtle)}
+.ms .ok{color:var(--teal)}.ms .vio{color:var(--violet-2)}.ms .am{color:var(--amber)}
+.chip{
+  position:absolute;display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--font-mono);font-size:11.5px;font-weight:500;
+  background:rgba(16,17,28,.92);border:1px solid var(--line-2);border-radius:12px;padding:9px 14px;
+  box-shadow:0 14px 40px rgba(0,0,0,.5);backdrop-filter:blur(8px);
+}
+.chip svg{width:15px;height:15px}
+.chip-1{top:-18px;right:22px;color:var(--teal);border-color:rgba(45,212,191,.35);animation:float 6s ease-in-out .8s infinite}
+.chip-2{bottom:34px;left:-34px;color:var(--violet-2);border-color:rgba(139,92,246,.4);animation:float 6.5s ease-in-out .3s infinite}
+.chip-3{bottom:-16px;right:48px;color:var(--lime);border-color:rgba(163,230,53,.3);animation:float 7s ease-in-out 1.2s infinite}
+
+/* ── marquee stats ── */
+.stats{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(255,255,255,.015);padding:34px 0;margin:30px 0 0}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center}
+.stat b{display:block;font-family:var(--font-display);font-weight:800;font-size:clamp(28px,3vw,40px);letter-spacing:-.02em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat span{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--subtle)}
+
+/* ── sections ── */
+section{padding:104px 0}
+.sec-head{max-width:640px;margin-bottom:58px}
+.kicker{font-family:var(--font-mono);font-size:12px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.kicker::before{content:"";width:26px;height:1px;background:var(--teal)}
+h2{font-family:var(--font-display);font-size:clamp(32px,4vw,50px);font-weight:800;letter-spacing:-.025em;line-height:1.08;margin-bottom:16px}
+.sec-head p{color:var(--muted);font-size:17px}
+
+/* features */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.feat{
+  background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012));
+  border:1px solid var(--line);border-radius:var(--radius);padding:28px 26px;
+  transition:.3s;position:relative;overflow:hidden;
+}
+.feat::before{content:"";position:absolute;inset:0;background:radial-gradient(400px 200px at var(--mx,50%) -20%,rgba(139,92,246,.16),transparent 70%);opacity:0;transition:.4s}
+.feat:hover{transform:translateY(-5px);border-color:rgba(139,92,246,.35)}
+.feat:hover::before{opacity:1}
+.feat .icon{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;margin-bottom:18px;background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.3);color:var(--violet-2)}
+.feat:nth-child(2) .icon{background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.3);color:var(--teal)}
+.feat:nth-child(3) .icon{background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.3);color:var(--amber)}
+.feat:nth-child(4) .icon{background:rgba(163,230,53,.1);border-color:rgba(163,230,53,.3);color:var(--lime)}
+.feat:nth-child(5) .icon{background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.3);color:var(--teal)}
+.feat:nth-child(6) .icon{background:rgba(139,92,246,.12);border-color:rgba(139,92,246,.3);color:var(--violet-2)}
+.feat .icon svg{width:22px;height:22px}
+.feat h3{font-family:var(--font-display);font-size:19px;font-weight:700;margin-bottom:9px;letter-spacing:-.01em}
+.feat p{font-size:14.5px;color:var(--muted)}
+
+/* how it works */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;counter-reset:step}
+.step{position:relative;background:linear-gradient(180deg,rgba(255,255,255,.03),transparent);border:1px solid var(--line);border-radius:var(--radius);padding:34px 28px 30px}
+.step::before{
+  counter-increment:step;content:"0" counter(step);
+  font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--violet-2);
+  display:inline-flex;padding:5px 12px;border-radius:8px;margin-bottom:20px;
+  background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);
+}
+.step h3{font-family:var(--font-display);font-size:20px;font-weight:700;margin-bottom:10px}
+.step p{font-size:14.5px;color:var(--muted)}
+.step .arrow{position:absolute;right:-15px;top:50%;transform:translateY(-50%);z-index:2;color:var(--subtle);display:block}
+.step:last-child .arrow{display:none}
+
+/* deliverability */
+.deliver{
+  background:linear-gradient(140deg,rgba(139,92,246,.13),rgba(45,212,191,.07) 60%,transparent);
+  border:1px solid rgba(139,92,246,.25);border-radius:26px;padding:56px;
+  display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;
+  position:relative;overflow:hidden;
+}
+.deliver::after{content:"";position:absolute;top:-40%;right:-10%;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(45,212,191,.16),transparent 65%)}
+.deliver h2{margin-bottom:14px}
+.deliver p{color:var(--muted);margin-bottom:26px;max-width:460px}
+.badges{display:flex;flex-wrap:wrap;gap:10px}
+.dbadge{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:12.5px;font-weight:500;background:rgba(7,7,12,.55);border:1px solid var(--line-2);padding:9px 16px;border-radius:999px}
+.dbadge svg{width:14px;height:14px;color:var(--teal)}
+.shield-art{display:grid;place-items:center;position:relative;z-index:1}
+.shield-art svg{width:min(240px,60vw);filter:drop-shadow(0 20px 50px rgba(139,92,246,.35))}
+
+/* cta band */
+.cta-band{text-align:center;padding:110px 0 120px;position:relative}
+.cta-band::before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(760px,90vw);height:420px;background:radial-gradient(ellipse,rgba(139,92,246,.22),transparent 65%);pointer-events:none}
+.cta-band h2{font-size:clamp(36px,4.6vw,58px);margin-bottom:18px;position:relative}
+.cta-band p{color:var(--muted);font-size:18px;margin-bottom:36px;position:relative}
+.cta-band .btn{position:relative}
+
+/* faq */
+.faq{max-width:760px;margin:0 auto}
+details{border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.02);margin-bottom:12px;overflow:hidden;transition:.25s}
+details[open]{border-color:rgba(139,92,246,.4);background:rgba(139,92,246,.05)}
+summary{
+  list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;
+  font-family:var(--font-display);font-weight:600;font-size:16.5px;padding:20px 24px;
+}
+summary::-webkit-details-marker{display:none}
+summary .plus{flex:none;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;border:1px solid var(--line-2);color:var(--muted);font-family:var(--font-mono);font-size:15px;transition:.25s}
+details[open] summary .plus{transform:rotate(45deg);color:var(--violet-2);border-color:rgba(139,92,246,.5)}
+details .ans{padding:0 24px 22px;color:var(--muted);font-size:15px;max-width:640px}
+
+/* footer */
+footer{padding:40px 0 56px}
+.foot-card{
+  background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.008));
+  border:1px solid var(--line);border-radius:26px;padding:48px 46px 30px;
+  position:relative;overflow:hidden;
+}
+.foot-card::before{
+  content:"";position:absolute;top:-50%;left:-5%;width:520px;height:420px;
+  background:radial-gradient(circle,rgba(139,92,246,.13),transparent 65%);pointer-events:none;
+}
+.foot-top{display:grid;grid-template-columns:1.15fr .62fr .62fr .62fr 1.25fr;gap:34px;position:relative}
+.foot-brand p{color:var(--muted);font-size:14.5px;max-width:300px;margin:16px 0 22px}
+.foot-checks{list-style:none;display:grid;gap:12px}
+.foot-checks li{display:flex;align-items:center;gap:11px;font-size:14.5px;font-weight:500}
+.foot-checks .tick{
+  flex:none;width:25px;height:25px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(45,212,191,.12);border:1px solid rgba(45,212,191,.35);color:var(--teal);
+}
+.foot-checks .tick svg{width:13px;height:13px}
+.fcol h4{
+  font-family:var(--font-mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--violet-2);margin-bottom:8px;padding-bottom:10px;display:inline-block;
+  border-bottom:2px solid var(--violet);
+}
+.fcol ul{list-style:none;margin-top:10px}
+.fcol a{display:block;font-size:14.5px;color:var(--muted);margin-bottom:11px;transition:.2s}
+.fcol a:hover{color:var(--text);transform:translateX(3px)}
+.news{
+  background:rgba(255,255,255,.035);border:1px solid var(--line-2);border-radius:18px;padding:24px 22px;
+}
+.news-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.news-ico{
+  flex:none;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;
+  background:rgba(139,92,246,.14);border:1px solid rgba(139,92,246,.35);color:var(--violet-2);
+}
+.news-ico svg{width:20px;height:20px}
+.news h4{font-family:var(--font-display);font-size:19px;font-weight:700;letter-spacing:-.01em}
+.news p{font-size:14px;color:var(--muted);margin-bottom:16px}
+.news-form{display:flex;gap:10px}
+.news-form input{
+  flex:1;min-width:0;background:rgba(7,7,12,.6);border:1px solid var(--line-2);border-radius:12px;
+  padding:13px 16px;color:var(--text);font-family:var(--font-body);font-size:14.5px;transition:.2s;
+}
+.news-form input::placeholder{color:var(--subtle)}
+.news-form input:focus{outline:none;border-color:rgba(139,92,246,.6);background:rgba(7,7,12,.8)}
+.news-form button{
+  flex:none;width:52px;height:48px;border-radius:12px;border:0;cursor:pointer;display:grid;place-items:center;
+  background:linear-gradient(120deg,#a78bfa,#8b5cf6);color:#0b0714;transition:.22s;
+  box-shadow:0 6px 20px rgba(139,92,246,.4);
+}
+.news-form button:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(139,92,246,.55)}
+.news-form button svg{width:19px;height:19px}
+/* button icon states: idle → loading → done */
+.news-form button .ico-spin,
+.news-form button .ico-done{display:none}
+.news-form button[data-state="loading"]{pointer-events:none}
+.news-form button[data-state="loading"] .ico-arrow{display:none}
+.news-form button[data-state="loading"] .ico-spin{display:block;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.news-form button[data-state="done"]{background:linear-gradient(120deg,#4ade80,#2dd4bf);pointer-events:none}
+.news-form button[data-state="done"] .ico-arrow{display:none}
+.news-form button[data-state="done"] .ico-done{display:block}
+.news-form input.invalid{border-color:rgba(248,113,113,.7)}
+.news-note{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--subtle);margin:12px 0 0;transition:color .2s}
+.news-note svg{width:14px;height:14px;color:var(--teal);flex:none;transition:color .2s}
+.news-note.ok{color:var(--teal)}
+.news-note.err{color:#f87171}
+.news-note.err svg{color:#f87171}
+
+.foot-badges{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+  border-top:1px solid var(--line);margin-top:40px;padding-top:28px;position:relative;
+}
+.fbadge{display:flex;align-items:center;gap:14px;padding:4px 24px;border-right:1px solid var(--line)}
+.fbadge:last-child{border-right:0}
+.fbadge:first-child{padding-left:0}
+.fb-ico{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center}
+.fb-ico svg{width:19px;height:19px}
+.fb-1{background:rgba(139,92,246,.13);border:1px solid rgba(139,92,246,.32);color:var(--violet-2)}
+.fb-2{background:rgba(251,191,36,.11);border:1px solid rgba(251,191,36,.3);color:var(--amber)}
+.fb-3{background:rgba(45,212,191,.11);border:1px solid rgba(45,212,191,.3);color:var(--teal)}
+.fb-4{background:rgba(163,230,53,.1);border:1px solid rgba(163,230,53,.28);color:var(--lime)}
+.fbadge b{display:block;font-family:var(--font-display);font-size:15.5px;font-weight:700;letter-spacing:-.01em}
+.fbadge span{font-size:13px;color:var(--subtle)}
+
+.foot-base{
+  border-top:1px solid var(--line);margin-top:28px;padding-top:26px;
+  display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;position:relative;
+}
+.foot-base p{font-size:13.5px;color:var(--subtle);line-height:1.7}
+.foot-base .legal{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:13.5px}
+.foot-base .legal a{color:var(--muted);transition:.2s}
+.foot-base .legal a:hover{color:var(--violet-2)}
+.foot-base .legal i{width:4px;height:4px;border-radius:50%;background:var(--subtle);display:block}
+.foot-base b a{color:var(--violet-2);font-weight:700}
+.socials{display:flex;gap:9px}
+.socials a{
+  width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(255,255,255,.04);border:1px solid var(--line-2);color:var(--muted);transition:.22s;
+}
+.socials a:hover{background:rgba(139,92,246,.16);border-color:rgba(139,92,246,.45);color:var(--violet-2);transform:translateY(-2px)}
+.socials svg{width:16px;height:16px}
+
+/* reveal on scroll */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s cubic-bezier(.22,.8,.3,1)}
+.reveal.in{opacity:1;transform:none}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}.d5{transition-delay:.4s}.d6{transition-delay:.48s}
+
+/* hero load animation */
+.rise{opacity:0;transform:translateY(26px);animation:rise .8s cubic-bezier(.22,.8,.3,1) forwards}
+.r1{animation-delay:.05s}.r2{animation-delay:.15s}.r3{animation-delay:.25s}.r4{animation-delay:.35s}.r5{animation-delay:.45s}.r6{animation-delay:.3s}
+@keyframes rise{to{opacity:1;transform:none}}
+
+/* responsive */
+@media(max-width:960px){
+  .hero-grid{grid-template-columns:1fr;gap:64px}
+  .feat-grid{grid-template-columns:1fr 1fr}
+  .steps{grid-template-columns:1fr}
+  .step .arrow{display:none}
+  .deliver{grid-template-columns:1fr;padding:40px 28px}
+  .stats-row{grid-template-columns:1fr 1fr;gap:28px}
+  .nav-links{display:none}
+  .chip-2{left:-8px}
+  .foot-card{padding:36px 26px 26px}
+  .foot-top{grid-template-columns:1fr 1fr;gap:32px}
+  .foot-brand{grid-column:1/-1}
+  .news{grid-column:1/-1}
+  .foot-badges{grid-template-columns:1fr 1fr;gap:22px}
+  .fbadge{border-right:0;padding:0}
+  .foot-base{justify-content:center;text-align:center}
+}
+@media(max-width:600px){
+  .feat-grid{grid-template-columns:1fr}
+  .hero{padding-top:140px}
+  .btn-ghost.nav-login{display:none}
+  .chip-1{right:6px}.chip-3{right:12px}
+  .foot-top{grid-template-columns:1fr}
+  .foot-badges{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="atmo"></div>
+<div class="grain"></div>
+
+<!-- NAV -->
+<div class="nav-shell">
+  <nav>
+    <a class="brand" href="#top" aria-label="Sendpeak home">
+      <span class="mark">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M3 8l9 6 9-6" stroke="#0b0714" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="5" width="18" height="14" rx="3" stroke="#0b0714" stroke-width="2.2"/></svg>
+      </span>
+      Sendpeak
+    </a>
+    <ul class="nav-links">
+      <li><a href="#inside">What's inside</a></li>
+      <li><a href="#how">Subscribing</a></li>
+      <li><a href="#deliverability">How we send</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a class="btn btn-ghost nav-login" href="https://app.sendpeak.in/login">Team login</a>
+      <a class="btn btn-primary" href="#subscribe">Subscribe</a>
+    </div>
+  </nav>
+</div>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="badge rise r1"><span class="dot"></span>Monthly Newsletter &middot; From the Sendpeak team</div>
+      <h1 class="rise r2">Email that actually <span class="grad-text">lands in the inbox.</span></h1>
+      <p class="lede rise r3">We're a small team that runs our own email programme. Once a month we write up what we've learned about deliverability, authentication and writing email people genuinely want to open — and send it to anyone who asks for it.</p>
+      <div class="hero-cta rise r4">
+        <a class="btn btn-primary btn-lg" href="#subscribe">Subscribe to the newsletter
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a class="btn btn-outline btn-lg" href="#inside">What's inside</a>
+      </div>
+      <div class="trust rise r5">
+        <span><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>One email a month</span>
+        <span><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Unsubscribe in one click</span>
+        <span><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>We never share your address</span>
+      </div>
+    </div>
+
+    <div class="mock-wrap rise r6">
+      <div class="mock">
+        <div class="mock-bar">
+          <i class="r"></i><i class="y"></i><i class="g"></i>
+          <span class="title">Issue #12 &middot; The Sendpeak Letter</span>
+          <span class="live-chip"><span class="dot" style="width:6px;height:6px"></span>LATEST</span>
+        </div>
+        <div class="mock-body">
+          <div class="mock-sub">This month</div>
+          <div class="mock-subject">Why your DMARC record matters in 2026</div>
+          <div class="meter">
+            <div class="meter-top">
+              <b>3 min read</b>
+              <small>plus two short links</small>
+            </div>
+            <div class="bar"><i></i></div>
+          </div>
+          <div class="mock-stats">
+            <div class="ms"><b class="ok">1&times;</b><span>Per month</span></div>
+            <div class="ms"><b class="vio">0</b><span>Spam, ever</span></div>
+            <div class="ms"><b class="am">1-click</b><span>Unsubscribe</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="chip chip-1"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2l7 4v6c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6l7-4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Opt-in only</div>
+      <div class="chip chip-2"><svg viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M22 2L15 22l-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>No third-party sharing</div>
+      <div class="chip chip-3"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Leave any time</div>
+    </div>
+  </div>
+</header>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="wrap stats-row">
+    <div class="stat reveal"><b>1&times;</b><span>Email per month</span></div>
+    <div class="stat reveal d1"><b>3 min</b><span>Average read</span></div>
+    <div class="stat reveal d2"><b>100%</b><span>Opt-in subscribers</span></div>
+    <div class="stat reveal d3"><b>0</b><span>Shared with anyone</span></div>
+  </div>
+</div>
+
+<!-- WHAT'S INSIDE -->
+<section id="inside">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">What's inside</div>
+      <h2>One useful email. Once a month.</h2>
+      <p>No drip sequences, no upsells, no daily "just checking in". Just what we worked on and what it taught us.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat reveal">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2l7 4v6c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6l7-4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>Deliverability notes</h3>
+        <p>What actually changed at Gmail and Outlook this month, and the small fixes that kept our own mail out of the spam folder.</p>
+      </div>
+      <div class="feat reveal d1">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2.5" stroke="currentColor" stroke-width="2"/><path d="M7 9h10M7 13h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <h3>Authentication, explained</h3>
+        <p>SPF, DKIM and DMARC in plain language — what each record does, and how to check yours is set up correctly.</p>
+      </div>
+      <div class="feat reveal d2">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 19h16M7 16V9m5 7V5m5 11v-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <h3>Numbers from our own sends</h3>
+        <p>Open rates, bounce rates, what a subject line change did — real figures from our list, not recycled industry averages.</p>
+      </div>
+      <div class="feat reveal d3">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 4h16v12H7l-3 3V4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div>
+        <h3>Writing that gets read</h3>
+        <p>Subject lines, opening sentences and the habit of cutting an email in half before sending it.</p>
+      </div>
+      <div class="feat reveal d4">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 8v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>Short by design</h3>
+        <p>Every issue is a three-minute read. If we have nothing worth saying in a given month, we don't send anything.</p>
+      </div>
+      <div class="feat reveal d5">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="11" rx="2.5" stroke="currentColor" stroke-width="2"/><path d="M8 10V7a4 4 0 018 0v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <h3>Your address stays ours</h3>
+        <p>We never sell, rent or share subscriber addresses. One click unsubscribes you for good — no confirmation loops.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT SUBSCRIBING MEANS -->
+<section id="how" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">What subscribing means</div>
+      <h2>You ask for it. You can leave any time.</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <h3>You enter your address</h3>
+        <p>Nobody is added without asking. We only ever email addresses that were typed into the form on this page.</p>
+        <span class="arrow"><svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </div>
+      <div class="step reveal d1">
+        <h3>One email a month</h3>
+        <p>A short letter about what we learned running our own email programme. No sales sequences, no daily follow-ups.</p>
+        <span class="arrow"><svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </div>
+      <div class="step reveal d2">
+        <h3>One click to leave</h3>
+        <p>Every email carries a one-click unsubscribe. It takes effect immediately and permanently — we never ask you to confirm.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DELIVERABILITY -->
+<section id="deliverability" style="padding-top:30px">
+  <div class="wrap">
+    <div class="deliver reveal">
+      <div>
+        <div class="kicker">How we send our own mail</div>
+        <h2>We practise what we write about.</h2>
+        <p>Our own newsletter is fully authenticated and sent only to people who asked for it. Every message carries one-click unsubscribe, and opt-outs and bounces are suppressed automatically — the same standards we write about each month.</p>
+        <div class="badges">
+          <span class="dbadge"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>SPF</span>
+          <span class="dbadge"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>DKIM 2048-bit</span>
+          <span class="dbadge"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>DMARC</span>
+          <span class="dbadge"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>One-click unsubscribe</span>
+          <span class="dbadge"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Opt-in only</span>
+        </div>
+      </div>
+      <div class="shield-art">
+        <svg viewBox="0 0 200 200" fill="none">
+          <defs>
+            <linearGradient id="sg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#a78bfa"/><stop offset="1" stop-color="#2dd4bf"/>
+            </linearGradient>
+          </defs>
+          <path d="M100 14l64 26v50c0 44-30 72-64 92-34-20-64-48-64-92V40l64-26z" stroke="url(#sg)" stroke-width="5" stroke-linejoin="round" fill="rgba(139,92,246,.06)"/>
+          <path d="M68 100l22 22 44-46" stroke="url(#sg)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUBSCRIBE -->
+<section class="cta-band" id="subscribe">
+  <div class="wrap">
+    <h2 class="reveal">Get the <span class="grad-text">next issue.</span></h2>
+    <p class="reveal d1">One short email a month. Unsubscribe in one click, whenever you like.</p>
+    <form class="news-form reveal d2" id="heroForm" novalidate
+          style="max-width:440px;margin:0 auto;position:relative;">
+      <input type="email" id="heroEmail" name="email" placeholder="you@company.com" aria-label="Email address" required autocomplete="email">
+      <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+      <button type="submit" id="heroBtn" aria-label="Subscribe">
+        <svg class="ico-arrow" viewBox="0 0 24 24" fill="none"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="ico-spin" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.6" stroke-opacity=".25"/><path d="M21 12a9 9 0 00-9-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
+        <svg class="ico-done" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </form>
+    <p class="news-note reveal d3" id="heroNote" style="justify-content:center;margin-top:14px;">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l7 4v6c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6l7-4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      <span>No spam. Unsubscribe anytime.</span>
+    </p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal" style="text-align:center;margin-left:auto;margin-right:auto">
+      <div class="kicker" style="justify-content:center">FAQ</div>
+      <h2>Questions, answered.</h2>
+    </div>
+    <div class="faq">
+      <details class="reveal" open>
+        <summary>How often will you email me?<span class="plus">+</span></summary>
+        <div class="ans">Once a month, and only when we have something worth writing about. If a month goes by without anything useful to say, we skip it rather than filling your inbox.</div>
+      </details>
+      <details class="reveal d1">
+        <summary>How do I unsubscribe?<span class="plus">+</span></summary>
+        <div class="ans">Every email has an unsubscribe link in the footer, and your mail app's own one-click unsubscribe button works too. Either takes effect immediately and permanently — we never ask you to confirm or fill in a form.</div>
+      </details>
+      <details class="reveal d2">
+        <summary>Will you share or sell my email address?<span class="plus">+</span></summary>
+        <div class="ans">No. Subscriber addresses are never sold, rented or shared with anyone. They are used for this newsletter and nothing else.</div>
+      </details>
+      <details class="reveal d3">
+        <summary>Who writes it?<span class="plus">+</span></summary>
+        <div class="ans">Our own small team. Everything in it comes from running our own email programme — the fixes, the mistakes and the numbers are ours, not repackaged from elsewhere.</div>
+      </details>
+      <details class="reveal d4">
+        <summary>What is the login link for?<span class="plus">+</span></summary>
+        <div class="ans">That is the internal dashboard our team uses to write and send this newsletter. It is not open for public sign-up — accounts are created by an administrator for our own staff only.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-card">
+      <div class="foot-top">
+        <div class="foot-brand">
+          <a class="brand" href="#top">
+            <span class="mark">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M3 8l9 6 9-6" stroke="#0b0714" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="5" width="18" height="14" rx="3" stroke="#0b0714" stroke-width="2.2"/></svg>
+            </span>
+            Sendpeak
+          </a>
+          <p>A monthly letter about email deliverability, written by the team that sends it.</p>
+          <ul class="foot-checks">
+            <li><span class="tick"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>One email a month</li>
+            <li><span class="tick"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Opt-in subscribers only</li>
+            <li><span class="tick"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Never shared or sold</li>
+          </ul>
+        </div>
+
+        <div class="fcol">
+          <h4>Newsletter</h4>
+          <ul>
+            <li><a href="#inside">What's inside</a></li>
+            <li><a href="#how">What subscribing means</a></li>
+            <li><a href="#subscribe">Subscribe</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ul>
+        </div>
+
+        <div class="fcol">
+          <h4>Topics</h4>
+          <ul>
+            <li><a href="#deliverability">Deliverability</a></li>
+            <li><a href="#inside">Authentication</a></li>
+            <li><a href="#inside">Writing email</a></li>
+            <li><a href="mailto:hello@sendpeak.in">Ask a question</a></li>
+          </ul>
+        </div>
+
+        <div class="fcol">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="https://kaxon.in/" target="_blank" rel="noopener">Kaxon</a></li>
+            <li><a href="#top">About</a></li>
+            <li><a href="mailto:hello@sendpeak.in">Contact</a></li>
+            <li><a href="#faq">Privacy</a></li>
+            <li><a href="#faq">Terms</a></li>
+          </ul>
+        </div>
+
+        <div class="news">
+          <div class="news-head">
+            <span class="news-ico">
+              <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="2"/><path d="M3 8l9 6 9-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <h4>Stay in the loop</h4>
+          </div>
+          <p>One short letter a month about email deliverability. Opt-in only, and one click to leave.</p>
+          <form class="news-form" id="newsForm" novalidate>
+            <input type="email" id="newsEmail" name="email" placeholder="Enter your email" aria-label="Email address" required autocomplete="email">
+            <!-- honeypot: hidden from real visitors, filled by bots -->
+            <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+            <button type="submit" id="newsBtn" aria-label="Subscribe">
+              <svg class="ico-arrow" viewBox="0 0 24 24" fill="none"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg class="ico-spin" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.6" stroke-opacity=".25"/><path d="M21 12a9 9 0 00-9-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
+              <svg class="ico-done" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </form>
+          <p class="news-note" id="newsNote"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2l7 4v6c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6l7-4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span>No spam. Unsubscribe anytime.</span></p>
+        </div>
+      </div>
+
+      <div class="foot-badges">
+        <div class="fbadge">
+          <span class="fb-ico fb-1"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="11" rx="2.5" stroke="currentColor" stroke-width="2"/><path d="M8 10V7a4 4 0 018 0v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+          <span><b>Your address is safe</b><span>Never sold, rented or shared.</span></span>
+        </div>
+        <div class="fbadge">
+          <span class="fb-ico fb-2"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 8v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span><b>Once a month</b><span>A three-minute read.</span></span>
+        </div>
+        <div class="fbadge">
+          <span class="fb-ico fb-3"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span><b>Fully authenticated</b><span>SPF, DKIM &amp; DMARC.</span></span>
+        </div>
+        <div class="fbadge">
+          <span class="fb-ico fb-4"><svg viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span>
+          <span><b>One-click exit</b><span>No confirmation loops.</span></span>
+        </div>
+      </div>
+
+      <div class="foot-base">
+        <p>© <span id="year">2026</span> <b><a href="https://kaxon.in/" target="_blank" rel="noopener">Kaxon</a></b>. All rights reserved.<br>Designed and developed by <b><a href="https://kaxon.in/" target="_blank" rel="noopener">Kaxon</a></b>.</p>
+        <div class="legal">
+          <a href="#faq">Privacy Policy</a><i></i>
+          <a href="#faq">Terms of Service</a><i></i>
+          <a href="#faq">Data Policy</a><i></i>
+          <a href="#deliverability">Security</a>
+        </div>
+        <div class="socials">
+          <a href="https://kaxon.in/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3zM10 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.76-1.95C21.4 8.75 22 11.1 22 14.2V21h-4v-6c0-1.43-.03-3.27-2-3.27-2 0-2.3 1.56-2.3 3.17V21h-4z"/></svg></a>
+          <a href="https://kaxon.in/" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 3h3.2l-7 8 8.2 10h-6.4l-5-6.1-5.7 6.1H1.6l7.5-8.6L1.2 3h6.6l4.5 5.6zm-1.1 16h1.8L7.7 4.8H5.8z"/></svg></a>
+          <a href="mailto:hello@sendpeak.in" aria-label="Email"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="2"/><path d="M3 8l9 6 9-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// scroll reveal
+const io=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(n=>io.observe(n));
+
+// feature card cursor glow
+document.querySelectorAll('.feat').forEach(c=>{
+  c.addEventListener('pointermove',e=>{
+    const r=c.getBoundingClientRect();
+    c.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
+  });
+});
+
+document.getElementById('year').textContent=new Date().getFullYear();
+
+// newsletter signup -> Sendpeak app API (wired to both forms on the page)
+(function(){
+  const API='https://app.sendpeak.in/api/newsletter/subscribe';
+  const DEFAULT_NOTE='No spam. Unsubscribe anytime.';
+
+  function wire(formId,inputId,btnId,noteId){
+    const form=document.getElementById(formId),
+          input=document.getElementById(inputId),
+          btn=document.getElementById(btnId),
+          note=document.getElementById(noteId);
+    if(!form||!input||!btn||!note)return;
+    const noteText=note.querySelector('span');
+
+    function say(msg,kind){
+      noteText.textContent=msg;
+      note.classList.remove('ok','err');
+      if(kind)note.classList.add(kind);
+    }
+
+    form.addEventListener('submit',async e=>{
+      e.preventDefault();
+      const email=input.value.trim();
+
+      // client-side check first so obvious typos never hit the network
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){
+        input.classList.add('invalid');
+        say('Please enter a valid email address.','err');
+        input.focus();
+        return;
+      }
+      input.classList.remove('invalid');
+
+      btn.dataset.state='loading';
+      say('Subscribing…');
+
+      try{
+        const res=await fetch(API,{
+          method:'POST',
+          headers:{'Content-Type':'application/json','Accept':'application/json'},
+          body:JSON.stringify({email,website:form.website.value})
+        });
+        const data=await res.json().catch(()=>({}));
+
+        if(res.ok&&data.ok){
+          btn.dataset.state='done';
+          say(data.message||"You're on the list — welcome aboard!",'ok');
+          input.value='';
+          input.disabled=true;
+        }else{
+          btn.dataset.state='';
+          say(data.message||'Could not subscribe right now. Please try again.','err');
+        }
+      }catch(err){
+        btn.dataset.state='';
+        say('Network error — please check your connection and retry.','err');
+      }
+    });
+
+    // clear the error styling as soon as the visitor edits the field
+    input.addEventListener('input',()=>{
+      if(input.classList.contains('invalid')||note.classList.contains('err')){
+        input.classList.remove('invalid');
+        say(DEFAULT_NOTE);
+      }
+    });
+  }
+
+  wire('newsForm','newsEmail','newsBtn','newsNote');
+  wire('heroForm','heroEmail','heroBtn','heroNote');
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+
+sendpeak.in {
+    tls {
+        ca https://acme-v02.api.letsencrypt.org/directory
+    }
+    root * /etc/caddy/sendpeak-landing
+    encode gzip
+    file_server
+    header -server
+}
+
+www.sendpeak.in {
+    tls {
+        ca https://acme-v02.api.letsencrypt.org/directory
+    }
+    redir https://sendpeak.in{uri} permanent
+}

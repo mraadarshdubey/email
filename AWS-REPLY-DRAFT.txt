@@ -1,0 +1,28 @@
+Hello,
+
+Thank you for the review. We respect the decision, and we would like to request a re-evaluation because we believe our earlier messages gave an inaccurate impression of our use case. We also want to correct the biggest mistake in our original request: the volume we asked for.
+
+1) WE ARE A SINGLE SENDER, NOT AN OPEN EMAIL SERVICE
+The website sendpeak.in describes the product, but the platform is an in-house tool operated exclusively by our own team for our own subscriber list. There is no self-service registration anywhere in the application: sign-up is disabled at the code level, Google sign-in only authenticates accounts that an administrator has already created, and no third party can send email through this AWS account under any circumstances. Every message originates from our one verified domain (sendpeak.in) and is sent by us, for our own newsletter only.
+
+2) WE WITHDRAW THE 70,000/DAY REQUEST - PLEASE CHOOSE OUR STARTING LIMIT
+Asking for high volume with no sending history was the wrong request, and we understand why it was declined. We are now asking only for production access at WHATEVER daily quota you consider appropriate - even 200-500 messages per day is fine with us. Our internal ramp-up plan, always subject to your limits and our own metrics:
+- Weeks 1-2: up to 500/day, most-engaged subscribers only
+- Weeks 3-4: up to 2,000/day
+- After week 4: gradual increases ONLY if bounce rate stays under 2% and complaint rate under 0.1%, requested through the normal quota process with real metrics to show.
+
+3) LIST ORIGIN AND HYGIENE
+Every address opted in through signup forms on our own website and landing pages. We have never purchased, rented or scraped addresses. Before the first campaign we will additionally validate the whole list and remove role accounts, disposable domains and long-unengaged addresses. Only contacts with an "active" status can be mailed; "unsubscribed" and "bounced" statuses are suppressed automatically at send time.
+
+4) COMPLIANCE TOOLING ALREADY LIVE TODAY (VERIFIABLE)
+- One-click unsubscribe per RFC 8058: every message carries List-Unsubscribe and List-Unsubscribe-Post headers plus a visible footer unsubscribe link; links are cryptographically signed per recipient; an opt-out takes effect immediately, even in the middle of a running campaign, and is permanent.
+- Bounce/complaint automation: a live SNS endpoint (https://app.sendpeak.in/api/ses/webhook) automatically suppresses hard bounces and treats every complaint as a permanent opt-out. We will subscribe it to the SES bounce/complaint topics the same day access is granted.
+- Application-level rate limiting keeps our send rate well below whatever rate you grant.
+- DKIM (2048-bit), SPF and DMARC are published for sendpeak.in, already verified in ap-south-1.
+
+5) CONTENT
+A short monthly product newsletter: a heading, one or two paragraphs, a single call-to-action link to our own site, full sender identity and the unsubscribe link in the footer. No affiliate content, no adult/gambling/cryptocurrency material, no attachments. We are happy to attach a full sample email if that helps the review.
+
+We have tried to build, in advance, everything your best-practices guide asks for, and we are deliberately asking to start small and earn higher limits with real metrics. If there is any specific concern remaining, please tell us what it is - we will fix it before asking again.
+
+Thank you for reconsidering.
